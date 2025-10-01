@@ -33,6 +33,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -40,6 +41,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
@@ -51,6 +53,7 @@
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.foregroundBox = new System.Windows.Forms.PictureBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.button24 = new System.Windows.Forms.Button();
             this.button23 = new System.Windows.Forms.Button();
             this.button22 = new System.Windows.Forms.Button();
@@ -66,19 +69,14 @@
             this.button13 = new System.Windows.Forms.Button();
             this.convulationPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button31 = new System.Windows.Forms.Button();
+            this.button30 = new System.Windows.Forms.Button();
+            this.button28 = new System.Windows.Forms.Button();
+            this.button27 = new System.Windows.Forms.Button();
+            this.saveWebcam = new System.Windows.Forms.Button();
             this.webCamPictureBox = new System.Windows.Forms.PictureBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.button25 = new System.Windows.Forms.Button();
-            this.button26 = new System.Windows.Forms.Button();
-            this.button27 = new System.Windows.Forms.Button();
-            this.button28 = new System.Windows.Forms.Button();
-            this.button29 = new System.Windows.Forms.Button();
-            this.button30 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -94,7 +92,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.convulationPictureBox)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.webCamPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -156,6 +153,15 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Basic Mode";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(350, 16);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 13);
+            this.textBox1.TabIndex = 9;
+            this.textBox1.Text = "Basic Image Processing";
             // 
             // button7
             // 
@@ -242,6 +248,17 @@
             this.tabPage2.Size = new System.Drawing.Size(808, 461);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Subtract Mode";
+            // 
+            // textBox2
+            // 
+            this.textBox2.BackColor = System.Drawing.Color.White;
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox2.Location = new System.Drawing.Point(361, 26);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(130, 13);
+            this.textBox2.TabIndex = 10;
+            this.textBox2.Text = "Subtract Image Processing";
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
             // 
             // button12
             // 
@@ -360,6 +377,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Convulation Mode";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox3
+            // 
+            this.textBox3.BackColor = System.Drawing.Color.White;
+            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox3.Location = new System.Drawing.Point(325, 19);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(180, 13);
+            this.textBox3.TabIndex = 14;
+            this.textBox3.Text = "Convulation Matrix Image Processing";
             // 
             // button24
             // 
@@ -501,13 +528,11 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.button31);
             this.tabPage4.Controls.Add(this.button30);
-            this.tabPage4.Controls.Add(this.button29);
             this.tabPage4.Controls.Add(this.button28);
             this.tabPage4.Controls.Add(this.button27);
-            this.tabPage4.Controls.Add(this.button26);
-            this.tabPage4.Controls.Add(this.button25);
-            this.tabPage4.Controls.Add(this.pictureBox3);
+            this.tabPage4.Controls.Add(this.saveWebcam);
             this.tabPage4.Controls.Add(this.webCamPictureBox);
             this.tabPage4.Controls.Add(this.checkBox1);
             this.tabPage4.Controls.Add(this.comboBox1);
@@ -519,10 +544,65 @@
             this.tabPage4.Text = "Webcam";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // button31
+            // 
+            this.button31.BackColor = System.Drawing.Color.Transparent;
+            this.button31.Location = new System.Drawing.Point(596, 347);
+            this.button31.Name = "button31";
+            this.button31.Size = new System.Drawing.Size(93, 23);
+            this.button31.TabIndex = 12;
+            this.button31.Text = "Clear";
+            this.button31.UseVisualStyleBackColor = false;
+            this.button31.Click += new System.EventHandler(this.clearWebCamClicked);
+            // 
+            // button30
+            // 
+            this.button30.BackColor = System.Drawing.Color.Transparent;
+            this.button30.Location = new System.Drawing.Point(465, 347);
+            this.button30.Name = "button30";
+            this.button30.Size = new System.Drawing.Size(75, 23);
+            this.button30.TabIndex = 11;
+            this.button30.Text = "Sepia";
+            this.button30.UseVisualStyleBackColor = false;
+            this.button30.Click += new System.EventHandler(this.sepiaWebcamClicked);
+            // 
+            // button28
+            // 
+            this.button28.BackColor = System.Drawing.Color.Transparent;
+            this.button28.Location = new System.Drawing.Point(286, 347);
+            this.button28.Name = "button28";
+            this.button28.Size = new System.Drawing.Size(93, 23);
+            this.button28.TabIndex = 9;
+            this.button28.Text = "Color Inversion";
+            this.button28.UseVisualStyleBackColor = false;
+            this.button28.Click += new System.EventHandler(this.invertWebcamClicked);
+            // 
+            // button27
+            // 
+            this.button27.BackColor = System.Drawing.Color.Transparent;
+            this.button27.Location = new System.Drawing.Point(131, 347);
+            this.button27.Name = "button27";
+            this.button27.Size = new System.Drawing.Size(75, 23);
+            this.button27.TabIndex = 8;
+            this.button27.Text = "GreyScale";
+            this.button27.UseVisualStyleBackColor = false;
+            this.button27.Click += new System.EventHandler(this.greyscaleWebcamClicked);
+            // 
+            // saveWebcam
+            // 
+            this.saveWebcam.Location = new System.Drawing.Point(392, 285);
+            this.saveWebcam.Name = "saveWebcam";
+            this.saveWebcam.Size = new System.Drawing.Size(75, 23);
+            this.saveWebcam.TabIndex = 7;
+            this.saveWebcam.Text = "Save Image";
+            this.saveWebcam.UseVisualStyleBackColor = true;
+            this.saveWebcam.UseWaitCursor = true;
+            this.saveWebcam.Click += new System.EventHandler(this.saveWebcamClicked);
+            // 
             // webCamPictureBox
             // 
             this.webCamPictureBox.BackColor = System.Drawing.Color.Gainsboro;
-            this.webCamPictureBox.Location = new System.Drawing.Point(86, 30);
+            this.webCamPictureBox.Location = new System.Drawing.Point(306, 29);
             this.webCamPictureBox.Name = "webCamPictureBox";
             this.webCamPictureBox.Size = new System.Drawing.Size(250, 200);
             this.webCamPictureBox.TabIndex = 4;
@@ -531,7 +611,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(155, 263);
+            this.checkBox1.Location = new System.Drawing.Point(375, 262);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(111, 17);
             this.checkBox1.TabIndex = 3;
@@ -542,109 +622,10 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(145, 236);
+            this.comboBox1.Location = new System.Drawing.Point(375, 235);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 0;
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(350, 16);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 13);
-            this.textBox1.TabIndex = 9;
-            this.textBox1.Text = "Basic Image Processing";
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Gainsboro;
-            this.pictureBox3.Location = new System.Drawing.Point(491, 30);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(250, 200);
-            this.pictureBox3.TabIndex = 5;
-            this.pictureBox3.TabStop = false;
-            // 
-            // button25
-            // 
-            this.button25.BackColor = System.Drawing.Color.Transparent;
-            this.button25.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.button25.Location = new System.Drawing.Point(86, 347);
-            this.button25.Name = "button25";
-            this.button25.Size = new System.Drawing.Size(75, 23);
-            this.button25.TabIndex = 6;
-            this.button25.Text = "Basic Copy";
-            this.button25.UseVisualStyleBackColor = false;
-            // 
-            // button26
-            // 
-            this.button26.Location = new System.Drawing.Point(589, 247);
-            this.button26.Name = "button26";
-            this.button26.Size = new System.Drawing.Size(75, 23);
-            this.button26.TabIndex = 7;
-            this.button26.Text = "Save Image";
-            this.button26.UseVisualStyleBackColor = true;
-            // 
-            // button27
-            // 
-            this.button27.BackColor = System.Drawing.Color.Transparent;
-            this.button27.Location = new System.Drawing.Point(225, 347);
-            this.button27.Name = "button27";
-            this.button27.Size = new System.Drawing.Size(75, 23);
-            this.button27.TabIndex = 8;
-            this.button27.Text = "GreyScale";
-            this.button27.UseVisualStyleBackColor = false;
-            // 
-            // button28
-            // 
-            this.button28.BackColor = System.Drawing.Color.Transparent;
-            this.button28.Location = new System.Drawing.Point(352, 347);
-            this.button28.Name = "button28";
-            this.button28.Size = new System.Drawing.Size(93, 23);
-            this.button28.TabIndex = 9;
-            this.button28.Text = "Color Inversion";
-            this.button28.UseVisualStyleBackColor = false;
-            // 
-            // button29
-            // 
-            this.button29.BackColor = System.Drawing.Color.Transparent;
-            this.button29.Location = new System.Drawing.Point(502, 347);
-            this.button29.Name = "button29";
-            this.button29.Size = new System.Drawing.Size(75, 23);
-            this.button29.TabIndex = 10;
-            this.button29.Text = "Histogram";
-            this.button29.UseVisualStyleBackColor = false;
-            // 
-            // button30
-            // 
-            this.button30.BackColor = System.Drawing.Color.Transparent;
-            this.button30.Location = new System.Drawing.Point(642, 347);
-            this.button30.Name = "button30";
-            this.button30.Size = new System.Drawing.Size(75, 23);
-            this.button30.TabIndex = 11;
-            this.button30.Text = "Sepia";
-            this.button30.UseVisualStyleBackColor = false;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BackColor = System.Drawing.Color.White;
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(361, 26);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(130, 13);
-            this.textBox2.TabIndex = 10;
-            this.textBox2.Text = "Subtract Image Processing";
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // textBox3
-            // 
-            this.textBox3.BackColor = System.Drawing.Color.White;
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox3.Location = new System.Drawing.Point(325, 19);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(180, 13);
-            this.textBox3.TabIndex = 14;
-            this.textBox3.Text = "Convulation Matrix Image Processing";
             // 
             // Form1
             // 
@@ -674,7 +655,6 @@
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.webCamPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -725,13 +705,11 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button30;
-        private System.Windows.Forms.Button button29;
         private System.Windows.Forms.Button button28;
         private System.Windows.Forms.Button button27;
-        private System.Windows.Forms.Button button26;
-        private System.Windows.Forms.Button button25;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.Button saveWebcam;
         private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button button31;
     }
 }
 

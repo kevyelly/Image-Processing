@@ -6,7 +6,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -20,6 +23,9 @@ namespace ImgProcessing
     {
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
+
+        private enum WebcamProcessMode { None, Grayscale, Invert, Sepia, Subtract }
+        private WebcamProcessMode _webcamMode = WebcamProcessMode.None;
         public Form1()
         {
             InitializeComponent();
@@ -30,6 +36,7 @@ namespace ImgProcessing
             subtractedBox.SizeMode = PictureBoxSizeMode.Zoom;
             convulationPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             convulationResultPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            webCamPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             LoadCameras();
 
         }
@@ -457,34 +464,7 @@ namespace ImgProcessing
             convulationResultPictureBox.Image = processedImage;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked)
-            {
        
-                if (comboBox1.SelectedIndex >= 0)
-                {
-                    videoSource = new VideoCaptureDevice(videoDevices[comboBox1.SelectedIndex].MonikerString);
-                    videoSource.NewFrame += VideoSource_NewFrame;
-                    videoSource.Start();
-                }
-            }
-            else
-            {
-                if (videoSource != null && videoSource.IsRunning)
-                {
-                    videoSource.SignalToStop();
-                    videoSource.NewFrame -= VideoSource_NewFrame;
-                    webCamPictureBox.Image = null;
-                }
-            }
-        }
-
-        private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
-        {
-            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
-            webCamPictureBox.Image = bitmap;
-        }
 
 
         private void redBG()
@@ -496,5 +476,205 @@ namespace ImgProcessing
         {
 
         }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (videoSource != null)
+            {
+                try
+                {
+                    videoSource.NewFrame -= Video_NewFrame;
+
+                    if (videoSource.IsRunning)
+                    {
+   
+                        videoSource.SignalToStop();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error stopping video: " + ex.Message);
+                }
+                finally
+                {
+                    videoSource = null;
+                }
+            }
+
+            base.OnFormClosing(e);
+        }
+
+
+        private Bitmap ApplyEffect(Bitmap src)
+        {
+            Bitmap bmp = new Bitmap(src.Width, src.Height, PixelFormat.Format24bppRgb);
+            Rectangle rect = new Rectangle(0, 0, src.Width, src.Height);
+
+            BitmapData srcData = src.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData dstData = bmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+
+            int bytes = Math.Abs(srcData.Stride) * src.Height;
+            byte[] srcBuffer = new byte[bytes];
+            byte[] dstBuffer = new byte[bytes];
+
+            Marshal.Copy(srcData.Scan0, srcBuffer, 0, bytes);
+
+            for (int i = 0; i < bytes; i += 3)
+            {
+                byte b = srcBuffer[i];
+                byte g = srcBuffer[i + 1];
+                byte r = srcBuffer[i + 2];
+
+                switch (_webcamMode)
+                {
+                    case WebcamProcessMode.Grayscale:
+                        byte gray = (byte)((r + g + b) / 3);
+                        dstBuffer[i] = dstBuffer[i + 1] = dstBuffer[i + 2] = gray;
+                        break;
+
+                    case WebcamProcessMode.Invert:
+                        dstBuffer[i] = (byte)(255 - b);
+                        dstBuffer[i + 1] = (byte)(255 - g);
+                        dstBuffer[i + 2] = (byte)(255 - r);
+                        break;
+
+                    case WebcamProcessMode.Sepia:
+                        int tr = (int)(0.393 * r + 0.769 * g + 0.189 * b);
+                        int tg = (int)(0.349 * r + 0.686 * g + 0.168 * b);
+                        int tb = (int)(0.272 * r + 0.534 * g + 0.131 * b);
+                        dstBuffer[i + 2] = (byte)Math.Min(255, tr);
+                        dstBuffer[i + 1] = (byte)Math.Min(255, tg);
+                        dstBuffer[i] = (byte)Math.Min(255, tb);
+                        break;
+
+                    case WebcamProcessMode.Subtract:
+                        byte grayVal = (byte)((r + g + b) / 3);
+                        byte greenGray = (byte)((0 + 255 + 0) / 3);
+                        byte sub = (byte)Math.Abs(grayVal - greenGray);
+                        if (sub > 5)
+                        {
+                            dstBuffer[i] = b;
+                            dstBuffer[i + 1] = g;
+                            dstBuffer[i + 2] = r;
+                        }
+                        else
+                        {
+                            dstBuffer[i] = dstBuffer[i + 1] = dstBuffer[i + 2] = 0;
+                        }
+                        break;
+
+                    default:
+                        dstBuffer[i] = b;
+                        dstBuffer[i + 1] = g;
+                        dstBuffer[i + 2] = r;
+                        break;
+                }
+            }
+
+            Marshal.Copy(dstBuffer, 0, dstData.Scan0, bytes);
+            src.UnlockBits(srcData);
+            bmp.UnlockBits(dstData);
+
+            return bmp;
+        }
+
+        private void Video_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            Bitmap frame = (Bitmap)eventArgs.Frame.Clone();
+            Bitmap processed = ApplyEffect(frame);
+            frame.Dispose(); // free original frame
+
+            webCamPictureBox.Invoke((Action)(() =>
+            {
+                webCamPictureBox.Image?.Dispose();
+                webCamPictureBox.Image = processed;
+            }));
+        }
+
+
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                
+                if (videoDevices == null || videoDevices.Count == 0) return;
+
+                int selectedIndex = comboBox1.SelectedIndex;
+                if (selectedIndex < 0) return;
+
+                videoSource = new VideoCaptureDevice(videoDevices[selectedIndex].MonikerString);
+                videoSource.NewFrame += Video_NewFrame;
+                videoSource.Start();
+            }
+            else
+            {
+                if (videoSource != null && videoSource.IsRunning)
+                {
+                    videoSource.SignalToStop();
+                    videoSource.WaitForStop();
+                    videoSource.NewFrame -= Video_NewFrame;
+                    videoSource = null;
+                }
+                webCamPictureBox.Image?.Dispose();
+                webCamPictureBox.Image = null;
+            }
+        }
+
+        private void greyscaleWebcamClicked(object sender, EventArgs e) // Grayscale button
+        {
+            _webcamMode = WebcamProcessMode.Grayscale;
+        }
+
+        private void invertWebcamClicked(object sender, EventArgs e) // Invert button
+        {
+            _webcamMode = WebcamProcessMode.Invert;
+        }
+
+        private void sepiaWebcamClicked(object sender, EventArgs e) // Sepia Button
+        {
+            _webcamMode = WebcamProcessMode.Sepia;
+        }
+
+        private void subtractWebcamClicked(object sender, EventArgs e) // subtract button
+        {
+            _webcamMode = WebcamProcessMode.Subtract;
+        }
+
+        private void clearWebCamClicked(object sender, EventArgs e) // clear effects button
+        {
+            _webcamMode = default;
+        }
+
+        private void saveWebcamClicked(object sender, EventArgs e)
+        {
+            if (webCamPictureBox.Image == null)
+            {
+                MessageBox.Show("No image to save!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Filter = "JPEG Image|*.jpg";
+                saveFileDialog.Title = "Save Image As";
+                saveFileDialog.FileName = "webcam_image.jpg";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        webCamPictureBox.Image.Save(saveFileDialog.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        MessageBox.Show("Image saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Failed to save image: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+
     }
 }
